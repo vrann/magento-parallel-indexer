@@ -5,7 +5,7 @@ if [[ $1 > 1 ]]; then
   START_TIME=$SECONDS
   for ((i=0;i<$1;i++))
   do
-    ./run.sh 1 $2 $i $4 $5 $6 $7 $8 $9 &
+    ./parallel-run.sh 1 $2 $i $4 $5 $6 $7 $8 $9 &
   done
   
   while [ 1 ]; do fg 2> /dev/null; [ $? == 1 ] && break; ELAPSED_TIME=$(($SECONDS - $START_TIME)); echo "All processes done. Elapsed Time: $ELAPSED_TIME"; done
