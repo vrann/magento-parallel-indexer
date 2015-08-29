@@ -1,0 +1,1 @@
+CLI tool which allows to run multiple processes of indexer in single-row mode
