@@ -10,9 +10,10 @@ to test how well indexers behave when run on the single entity simultaneously. C
 ## Usage
 
 1. Install Magento 2
-2. Invoke > composer require vrann/magento-parallel-indexer
-3. Invoke > bin/magento module:enable Magento_ParallelIndexer
-4. Invoke > bin/magento setup:upgrade
+2. Ensure that that minimum stability is "dev" in composer.json (add/update this line "minimum-stability": "dev")
+3. Invoke > composer require vrann/magento-parallel-indexer
+4. Invoke > bin/magento module:enable Magento_ParallelIndexer
+5. Invoke > bin/magento setup:upgrade
 
 Now CLI command is ready to be used. In order to test it run:
 ```php
