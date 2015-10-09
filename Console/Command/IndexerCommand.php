@@ -29,8 +29,6 @@ class IndexerCommand extends Command
     const INPUT_KEY_MAX_RULES = 'max-rules';
     const INPUT_KEY_REINDEX_ID = 'reindex-id';
 
-
-
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Collection
      */
@@ -175,15 +173,34 @@ class IndexerCommand extends Command
         }
 
         //These indexers are not ready to run in single-row mode
-        $excludeIndexers = ['catalogrule_rule', 'catalogsearch_fulltext'];
+        $excludeIndexers = [
+            'catalogrule_product',
+            'catalogrule_rule'
+        ];
 
-        $productIndexers = ['catalog_product_flat', 'catalog_product_price',
-            'catalog_product_attribute', 'cataloginventory_stock', 'catalogrule_product', 'targetrule_product_rule',
-            'catalogpermissions_product', 'catalogrule_rule', 'catalogsearch_fulltext'];
-        $categoryIndexers = ['catalog_category_flat', 'catalog_category_product', 'catalog_product_category',
-            'catalogpermissions_category'];
-        $ruleIndexers = ['targetrule_rule_product'];
-        $customerIndexres = ['customer_grid'];
+        $productIndexers = [
+            'catalog_product_flat',
+            'catalog_product_price',
+            'catalog_product_attribute',
+            'cataloginventory_stock',
+            'catalogrule_product',
+            'targetrule_product_rule',
+            'catalogpermissions_product',
+            'catalogsearch_fulltext'
+        ];
+        $categoryIndexers = [
+            'catalog_category_flat',
+            'catalog_category_product',
+            'catalog_product_category',
+            'catalogpermissions_category'
+        ];
+        $ruleIndexers = [
+            'targetrule_rule_product',
+            'catalogrule_rule'
+        ];
+        $customerIndexres = [
+            'customer_grid'
+        ];
 
         $requestedIndexer = $input->getOption('indexer');
 
@@ -195,8 +212,9 @@ class IndexerCommand extends Command
 
         foreach ($indexersData as $indexer) {
 
-            if (in_array($indexer->getIndexerId(), $excludeIndexers))
+            if (in_array($indexer->getIndexerId(), $excludeIndexers)) {
                 continue;
+            }
             if (count($runThese) > 0 && !in_array($indexer->getIndexerId(), $runThese)) {
                 continue;
             }
@@ -219,11 +237,13 @@ class IndexerCommand extends Command
             if (!is_null($input->getOption(self::INPUT_KEY_REINDEX_ID))) {
                 $id = $input->getOption(self::INPUT_KEY_REINDEX_ID);
             } else {
-                $id = mt_rand(1, $max);
+                $id = mt_rand(0, $max) > 1 ?: 1;
             }
 
-            $output->writeln('<info>' . $entity . '# id '
-                . $id . ' (out of ' . $max . ') for ' . $indexer->getIndexerId() . ' </info>');
+            $output->writeln(
+                '<info>' . $entity . '# id '
+                . $id . ' (out of ' . $max . ') for ' . $indexer->getIndexerId() . ' </info>'
+            );
             $this->indexRegistry->get($indexer->getIndexerId())->reindexRow($id);
             $output->writeln('<info>' . $indexer->getDescription() . ' completed.</info>');
         }
